@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.jiesz.init.mapper")
+@MapperScan("com.jiesz.writinghome.mapper")
 public class MybatisPlusConfig {
 
 }

@@ -31,12 +31,11 @@ public class SwaggerConfig {
     @Bean
     public Docket configApiDocs() {
         List<ResponseMessage> responseMessageList = new ArrayList<>();
-        responseMessageList.add(new ResponseMessageBuilder().code(400).message("错误请求").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(401).message("未授权").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(403).message("禁止").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(404).message("未找到").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(500).message("服务器内部错误").build());
-        responseMessageList.add(new ResponseMessageBuilder().code(409).message("冲突").build());
+        responseMessageList.add(new ResponseMessageBuilder().code(1001).message("请求参数格式错误").build());
+        responseMessageList.add(new ResponseMessageBuilder().code(2002).message("系统外部接口调用异常").build());
+        responseMessageList.add(new ResponseMessageBuilder().code(3001).message("数据未找到").build());
+        responseMessageList.add(new ResponseMessageBuilder().code(5001).message("没有访问权限").build());
+        responseMessageList.add(new ResponseMessageBuilder().code(4001).message("服务器内部错误").build());
         StringBuilder desc = new StringBuilder();
 
         return new Docket(DocumentationType.SWAGGER_2)
@@ -45,12 +44,12 @@ public class SwaggerConfig {
                 .globalResponseMessage(RequestMethod.PUT, responseMessageList)
                 .globalResponseMessage(RequestMethod.DELETE, responseMessageList)
                 .apiInfo(new ApiInfoBuilder()
-                        .title("xxx系统API文档")
+                        .title("writing-home API文档")
                         .description(desc.toString())
-                        .contact(new Contact("", null, ""))
+                        .contact(new Contact("jiesz", null, ""))
                         .build())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.jiesz.init"))
+                .apis(RequestHandlerSelectors.basePackage("com.jiesz.writinghome"))
                 .paths(PathSelectors.any())
                 .build();
     }
