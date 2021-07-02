@@ -1,16 +1,15 @@
-#  写作素材管理系统
-
-## 介绍
-
-
+# writing-home
+## 项目介绍
+writing-home项目，是一套写作素材管理系统，基于SpringBoot+MyBatis实现，采用Docker容器化部署。
+包括素材类别管理、素材管理、素材仿写管理等模块
 
 ## 技术栈
 
 前端：vue
 
-后端：springboot
+后端：springboot+MyBatis
 
-## 功能
+## 模块介绍
 
 ### 素材类别管理
 1. 素材类别的CRUD

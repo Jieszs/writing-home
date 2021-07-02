@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!--property用于配置变量，可通过${LOG_PATH} 取对应的值-->
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <springProperty scope="context" name="LOG_PATH" source="logging.logFolderPath"/>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="FILE_LOG_PATTERN" value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <contextName>logback</contextName>
+
+    <!--输出到控制台，一个appender定义一种输出策略，可以定义多个-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--filter中定义要输出的日志级别，例如：输出info级别以上的日志，默认是info-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>info</level>
+        </filter>
+        <!--日志输出编码格式化-->
+        <encoder>
+            <pattern>
+                ${CONSOLE_LOG_PATTERN}
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 输出到文件info，日期滚动记录 -->
+    <appender name="logInfoFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--<Prudent>true</Prudent>-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤其他只留info-->
+            <level>info</level>
+            <!--匹配到就禁止-->
+            <onMatch>ACCEPT</onMatch>
+            <!--没有匹配到就允许-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy 每天会生成一个日志文件-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--文件路径,定义了日志的切分方式,以防止日志填满整个磁盘空间-->
+            <fileNamePattern>
+                ${LOG_PATH}/info/hbmp-info-%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <!--只保留最近30天的日志-->
+            <maxHistory>30</maxHistory>
+            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
+            <!--<totalSizeCap>1GB</totalSizeCap>-->
+        </rollingPolicy>
+
+        <append>true</append>
+
+        <!--日志输出编码格式化-->
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 输出到文件error，日期滚动记录 -->
+    <appender name="logErrorFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--<Prudent>true</Prudent>-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤其他只留error-->
+            <level>error</level>
+            <!--匹配到就禁止-->
+            <onMatch>ACCEPT</onMatch>
+            <!--没有匹配到就允许-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy 每天会生成一个日志文件-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--文件路径,定义了日志的切分方式,以防止日志填满整个磁盘空间-->
+            <fileNamePattern>
+                ${LOG_PATH}/error/hbmp-error-%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <!--只保留最近30天的日志-->
+            <maxHistory>30</maxHistory>
+            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
+            <!--<totalSizeCap>1GB</totalSizeCap>-->
+        </rollingPolicy>
+
+        <append>true</append>
+
+        <!--日志输出编码格式化-->
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--把上边的两种种输出策略添加到跟节点，名称要保证和上边一致，否则报错 ，并指明输出级别为INFO-->
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="logInfoFile"/>
+        <appender-ref ref="logErrorFile"/>
+    </root>
+    <!--可选节点，用来具体指明包的日志输出级别  如果不设置，则会交个root配置的appender处理-->
+    <!--将该包下的日志交给console的appender处理，additivity设为false表示不再向上传递，如果置为true,则root接到后会再打印一次。 -->
+    <!--<logger name="com.centerm.hbmp.controller" level="INFO" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>-->
+
+</configuration>
