@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 public class BaseBean implements Serializable {
 
-	private static final long serialVersionUID = -5651501467149731391L;
+    private static final long serialVersionUID = -5651501467149731391L;
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this,
+                ToStringStyle.MULTI_LINE_STYLE);
+    }
 
 }

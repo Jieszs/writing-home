@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * swagger配置类
+ *
  * @author zj
  * @date 2019/12/10
  */
@@ -53,8 +54,6 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
-
-
 
 
 }

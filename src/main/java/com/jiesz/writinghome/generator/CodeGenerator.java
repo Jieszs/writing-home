@@ -14,20 +14,20 @@ import java.util.*;
 
 public class CodeGenerator {
     //表名
-    private static final String TABLE_NAME = "tag_info";
+    private static final String TABLE_NAME = "material_type_rela";
     //实体名
-    private static final String ENTITY_NAME = "Tag";
+    private static final String ENTITY_NAME = "MaterialTypeRela";
     //是否分页
     private static final Boolean ENABLE_PAGE = false;
     //是否树结构
-    private static final Boolean ENABLE_TREE = true;
+    private static final Boolean ENABLE_TREE = false;
     private static final List<String> SAVE_AND_UPDATE_IGNORE_FIELDS = Arrays.asList("insertTime", "updateTime", "state");
     //查询条件
     private static final List<String> SELECT_IGNORE_FIELDS = Arrays.asList("insertTime", "updateTime", "state");
     private static final IdType ID_TYPE = IdType.AUTO;
     //逻辑删除字段
-    private static final String LOGIC_DELETE_FIELD_NAME = "state";
-    private static final String EXIST_FIELD_NAME = "tagName";
+    private static final String LOGIC_DELETE_FIELD_NAME = null;
+    private static final String EXIST_FIELD_NAME = null;
     private static final String URL = "jdbc:mysql://localhost:3306/writing_home?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatementshedStatements=true&allowMultiQueries=true";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "123456";

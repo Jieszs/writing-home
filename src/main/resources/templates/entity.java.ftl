@@ -1,58 +1,58 @@
 package ${package.Entity};
 
 <#list table.importPackages as pkg>
-import ${pkg};
+    import ${pkg};
 </#list>
 <#if swagger2>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+    import io.swagger.annotations.ApiModel;
+    import io.swagger.annotations.ApiModelProperty;
 </#if>
 <#if entityLombokModel>
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+    import lombok.Data;
+    import lombok.EqualsAndHashCode;
     <#if chainModel>
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.experimental.Accessors;
-import lombok.Builder;
+        import lombok.NoArgsConstructor;
+        import lombok.AllArgsConstructor;
+        import lombok.experimental.Accessors;
+        import lombok.Builder;
     </#if>
 </#if>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 /**
- * <p>
- * ${table.comment!}
- * </p>
- *
- * @author ${author}
- * @since ${date}
- */
+* <p>
+    * ${table.comment!}
+    * </p>
+*
+* @author ${author}
+* @since ${date}
+*/
 <#if entityLombokModel>
-@Data
+    @Data
     <#if superEntityClass??>
-@EqualsAndHashCode(callSuper = true)
+        @EqualsAndHashCode(callSuper = true)
     <#else>
-@EqualsAndHashCode(callSuper = false)
+        @EqualsAndHashCode(callSuper = false)
     </#if>
     <#if chainModel>
-@Accessors(chain = true)
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+        @Accessors(chain = true)
+        @Builder
+        @AllArgsConstructor
+        @NoArgsConstructor
     </#if>
 </#if>
 <#if table.convert>
-@TableName("${table.name}")
+    @TableName("${table.name}")
 </#if>
 <#if swagger2>
-@ApiModel(value = "${entity}对象", description = "${table.comment!}")
+    @ApiModel(value = "${entity}对象", description = "${table.comment!}")
 </#if>
 <#if superEntityClass??>
-public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
+    public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
 <#elseif activeRecord>
-public class ${entity} extends Model<${entity}> {
+    public class ${entity} extends Model<${entity}> {
 <#else>
-public class ${entity} implements Serializable {
+    public class ${entity} implements Serializable {
 </#if>
 
 <#if entitySerialVersionUID>
@@ -68,51 +68,51 @@ public class ${entity} implements Serializable {
         <#if swagger2>
         <#-- 逻辑删除注解 -->
             <#if (logicDeleteFieldName!"") != field.name>
-    @ApiModelProperty(value = "${field.comment}")
+                @ApiModelProperty(value = "${field.comment}")
             </#if>
         <#else>
-    /**
-     * ${field.comment}
-     */
+            /**
+            * ${field.comment}
+            */
         </#if>
     </#if>
     <#if field.keyFlag>
-        <#-- 主键 -->
+    <#-- 主键 -->
         <#if field.keyIdentityFlag>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
+            @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
         <#elseif idType??>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
+            @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
         <#elseif field.convert>
-    @TableId("${field.annotationColumnName}")
+            @TableId("${field.annotationColumnName}")
         </#if>
-        <#-- 普通字段 -->
+    <#-- 普通字段 -->
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+            @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         <#else>
-    @TableField(fill = FieldFill.${field.fill})
+            @TableField(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
-    @TableField("${field.annotationColumnName}")
+        @TableField("${field.annotationColumnName}")
     </#if>
-    <#-- 乐观锁注解 -->
+<#-- 乐观锁注解 -->
     <#if (versionFieldName!"") == field.name>
-    @Version
+        @Version
     </#if>
-    <#-- 逻辑删除注解 -->
+<#-- 逻辑删除注解 -->
     <#if (logicDeleteFieldName!"") == field.name>
-     /**
-    *  逻辑删除字段 1正常0删除
-    */
-    @TableLogic
-    @JsonIgnore
+        /**
+        *  逻辑删除字段 1正常0删除
+        */
+        @TableLogic
+        @JsonIgnore
     </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>
-    /**
-    *  非数据库字段
-    */
+/**
+*  非数据库字段
+*/
 <#if (cfg.enablePage!"") == true>
     @JsonIgnore
     @TableField(exist = false)
@@ -134,26 +134,26 @@ public class ${entity} implements Serializable {
         <#else>
             <#assign getprefix="get"/>
         </#if>
-    public ${field.propertyType} ${getprefix}${field.capitalName}() {
+        public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
-    }
+        }
 
-    <#if chainModel>
-    public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-    <#else>
-    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-    </#if>
+        <#if chainModel>
+            public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+        <#else>
+            public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+        </#if>
         this.${field.propertyName} = ${field.propertyName};
         <#if chainModel>
-        return this;
+            return this;
         </#if>
-    }
+        }
     </#list>
 </#if>
 
 <#if entityColumnConstant>
     <#list table.fields as field>
-    public static final String ${field.name?upper_case} = "${field.name}";
+        public static final String ${field.name?upper_case} = "${field.name}";
 
     </#list>
 </#if>
@@ -171,7 +171,7 @@ public class ${entity} implements Serializable {
 <#if !entityLombokModel>
     @Override
     public String toString() {
-        return "${entity}{" +
+    return "${entity}{" +
     <#list table.fields as field>
         <#if field_index==0>
             "${field.propertyName}=" + ${field.propertyName} +
@@ -179,7 +179,7 @@ public class ${entity} implements Serializable {
             ", ${field.propertyName}=" + ${field.propertyName} +
         </#if>
     </#list>
-        "}";
+    "}";
     }
 </#if>
 }

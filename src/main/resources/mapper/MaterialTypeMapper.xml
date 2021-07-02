@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiesz.writinghome.mapper.MaterialTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jiesz.writinghome.entity.MaterialType">
+        <id column="typeId" property="typeId"/>
+        <result column="typeName" property="typeName"/>
+        <result column="parentId" property="parentId"/>
+        <result column="orderId" property="orderId"/>
+        <result column="userId" property="userId"/>
+        <result column="insertTime" property="insertTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        typeId, typeName, parentId, orderId, userId, insertTime, updateTime
+    </sql>
+
+    <!--查询条件-->
+    <sql id="where">
+        FROM material_type
+        <where>
+            <if test="typeId!=null and typeId!=''">
+                AND typeId = #{typeId}
+            </if>
+            <if test="typeName!=null and typeName!=''">
+                AND typeName = #{typeName}
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                AND parentId = #{parentId}
+            </if>
+            <if test="orderId!=null and orderId!=''">
+                AND orderId = #{orderId}
+            </if>
+            <if test="userId!=null and userId!=''">
+                AND userId = #{userId}
+            </if>
+            <if test="insertTime!=null and insertTime!=''">
+                AND insertTime = #{insertTime}
+            </if>
+            <if test="updateTime!=null and updateTime!=''">
+                AND updateTime = #{updateTime}
+            </if>
+        </where>
+    </sql>
+    <!--获取列表-->
+    <select id="list" parameterType="com.jiesz.writinghome.entity.MaterialType"
+            resultType="com.jiesz.writinghome.entity.MaterialType">
+        SELECT
+        <include refid="Base_Column_List"/>
+        <include refid="where"/>
+    </select>
+
+    <!--获取总数-->
+    <select id="count" parameterType="com.jiesz.writinghome.entity.MaterialType" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        <include refid="where"/>
+    </select>
+</mapper>

@@ -57,13 +57,13 @@ import java.util.ArrayList;
         @Override
         public boolean exist${cfg.existFieldName?cap_first}(String ${cfg.existFieldName}){
         ${entity} condition = ${entity}.builder()
-                                .${cfg.existFieldName}(${cfg.existFieldName})
-                                .build();
-            List<${entity}> list = list(condition);
-            if (!CollectionUtils.isEmpty(list)){
-            return true;
-            }
-            return false;
+        .${cfg.existFieldName}(${cfg.existFieldName})
+        .build();
+        List<${entity}> list = list(condition);
+        if (!CollectionUtils.isEmpty(list)){
+        return true;
+        }
+        return false;
         }
         /**
         *修改时判重
