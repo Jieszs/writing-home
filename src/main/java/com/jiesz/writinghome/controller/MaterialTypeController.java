@@ -34,6 +34,7 @@ public class MaterialTypeController {
     public Result<MaterialType> insert(
             @RequestBody @Validated MaterialType materialType
     ) {
+        materialType.setOrderId(iMaterialTypeService.getMaxOrderId(materialType.getParentId(), materialType.getUserId()) + 1);
         materialType.insert();
         return Result.success(materialType);
     }
@@ -87,7 +88,7 @@ public class MaterialTypeController {
         if (condition.selectById() == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        condition.deleteById();
+        iMaterialTypeService.delete(condition);
         return Result.success("删除成功");
     }
 }

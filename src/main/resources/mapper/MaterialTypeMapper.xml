@@ -58,4 +58,11 @@
         SELECT COUNT(1)
         <include refid="where"/>
     </select>
+
+    <!-- 根据parentId获取最大的order值-->
+    <select id="getMaxOrderId" resultType="Integer">
+		SELECT MAX(orderId) FROM material_type WHERE parentId=#{parentId} AND userId = #{userId}
+	</select>
+
+
 </mapper>

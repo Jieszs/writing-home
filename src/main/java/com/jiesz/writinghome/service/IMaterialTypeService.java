@@ -39,4 +39,28 @@ public interface IMaterialTypeService extends IService<MaterialType> {
      * 修改时判重
      */
     boolean existTypeName(Integer typeId, String typeName);
+
+    /**
+     * 上移
+     * @param materialType
+     * @return
+     */
+    boolean up(MaterialType materialType);
+
+    /**
+     * 下移
+     * @param materialType
+     * @return
+     */
+    boolean down(MaterialType materialType);
+
+    /**
+     * 获取当前最大值
+     * @param parentId
+     * @param userId
+     * @return
+     */
+    Integer getMaxOrderId(Integer parentId, Integer userId);
+
+    void delete(MaterialType condition);
 }

@@ -23,4 +23,6 @@ public interface MaterialTypeMapper extends BaseMapper<MaterialType> {
      * 获取总数
      */
     Integer count(MaterialType materialType);
+
+    Integer getMaxOrderId(Integer parentId, Integer userId);
 }

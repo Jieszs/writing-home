@@ -1,25 +1,19 @@
 package com.jiesz.writinghome.controller;
 
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiesz.writinghome.common.bean.Result;
+import com.jiesz.writinghome.common.enums.ResultCode;
+import com.jiesz.writinghome.entity.Parody;
+import com.jiesz.writinghome.service.IParodyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
-import com.jiesz.writinghome.common.enums.ResultCode;
-import com.jiesz.writinghome.common.bean.Result;
-import com.jiesz.writinghome.entity.Parody;
-import com.jiesz.writinghome.service.IParodyService;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
 import java.util.ArrayList;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -63,14 +57,12 @@ public class ParodyController {
     @GetMapping("/parodys")
     public Result
             <Page<Parody>> list(
-            @RequestParam(required = false) @ApiParam(value = "内容") String content,
             @RequestParam(required = false) @ApiParam(value = "素材id") Integer materialId,
             @RequestParam(required = false) @ApiParam(value = "用户id") Integer userId,
             @RequestParam(defaultValue = "0") @ApiParam(value = "偏移量") Integer offset,
             @RequestParam(defaultValue = "10") @ApiParam(value = "限制") Integer limit
     ) {
         Parody condition = Parody.builder()
-                .content(content)
                 .materialId(materialId)
                 .userId(userId)
                 .build();

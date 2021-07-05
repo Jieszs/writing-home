@@ -36,7 +36,6 @@ public class MaterialController {
     public Result<Material> insert(
             @RequestBody @Validated Material material
     ) {
-
         iMaterialService.insert(material);
         return Result.success(material);
     }
@@ -45,12 +44,11 @@ public class MaterialController {
     @PutMapping("/materials/{materialId}")
     public Result update(
             @RequestBody @Validated Material material
-
     ) {
         if (null == material.selectById()) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        material.updateById();
+        iMaterialService.update(material);
         return Result.success();
     }
 

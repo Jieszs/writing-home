@@ -1,5 +1,6 @@
 package com.jiesz.writinghome.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiesz.writinghome.entity.Material;
 import com.jiesz.writinghome.entity.MaterialTypeRela;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -51,9 +51,30 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> i
     @Override
     public Boolean insert(Material material) {
         boolean result = material.insert();
-
+        List<MaterialTypeRela> materialTypeRelas = convertByIds(material.getTypeIds(), material.getMaterialId());
+        materialTypeRelaService.saveBatch(materialTypeRelas);
         return result;
     }
 
+    @Override
+    public Boolean update(Material material) {
+        boolean result = material.updateById();
+        List<MaterialTypeRela> materialTypeRelas = convertByIds(material.getTypeIds(), material.getMaterialId());
+        MaterialTypeRela condition = new MaterialTypeRela();
+        condition.setMaterialId(material.getMaterialId());
+        materialTypeRelaService.remove(new QueryWrapper<>(condition));
+        materialTypeRelaService.saveBatch(materialTypeRelas);
+        return result;
+    }
 
+    private List<MaterialTypeRela> convertByIds(List<Integer> typeIds, int materialId) {
+        List<MaterialTypeRela> materialTypeRelas =
+                typeIds.stream().map(t -> {
+                    MaterialTypeRela rela = new MaterialTypeRela();
+                    rela.setMaterialId(materialId);
+                    rela.setTypeId(t);
+                    return rela;
+                }).collect(Collectors.toList());
+        return materialTypeRelas;
+    }
 }
