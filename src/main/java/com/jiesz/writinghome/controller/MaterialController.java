@@ -36,12 +36,13 @@ public class MaterialController {
     public Result<Material> insert(
             @RequestBody @Validated Material material
     ) {
-        material.insert();
+
+        iMaterialService.insert(material);
         return Result.success(material);
     }
 
     @ApiOperation("修改素材")
-    @PutMapping("/updatematerials/{materialId}")
+    @PutMapping("/materials/{materialId}")
     public Result update(
             @RequestBody @Validated Material material
 

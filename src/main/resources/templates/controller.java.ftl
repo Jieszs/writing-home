@@ -67,7 +67,7 @@ import java.util.List;
     }
 
     @ApiOperation("修改${table.comment!}")
-    @PutMapping("/update${cfg.urlName}/{${keyPropertyName}}")
+    @PutMapping("/${cfg.urlName}/{${keyPropertyName}}")
     public Result update(
     @RequestBody @Validated ${entity} ${entity?uncap_first}
 

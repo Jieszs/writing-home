@@ -1,13 +1,9 @@
 package com.jiesz.writinghome.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.time.LocalDateTime;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
 
@@ -22,6 +18,8 @@ import lombok.Builder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
+
+import static com.baomidou.mybatisplus.annotation.FieldStrategy.IGNORED;
 
 /**
  * <p>
@@ -52,7 +50,7 @@ public class MaterialType extends Model<MaterialType> {
     private String typeName;
 
     @ApiModelProperty(value = "父亲id")
-    @TableField("parentId")
+    @TableField(value = "parentId", updateStrategy = FieldStrategy.NEVER)
     private Integer parentId;
 
     @ApiModelProperty(value = "排序值，小的在前")
@@ -60,11 +58,12 @@ public class MaterialType extends Model<MaterialType> {
     private Integer orderId;
 
     @ApiModelProperty(value = "用户id")
-    @TableField("userId")
+    @TableField(value = "userId", updateStrategy = FieldStrategy.NEVER)
+    @JsonIgnore
     private Integer userId;
 
     @ApiModelProperty(value = "插入时间")
-    @TableField("insertTime")
+    @TableField(value = "insertTime", updateStrategy = FieldStrategy.NEVER)
     private LocalDateTime insertTime;
 
     @ApiModelProperty(value = "更新时间")

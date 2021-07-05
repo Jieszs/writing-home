@@ -1,14 +1,9 @@
 package com.jiesz.writinghome.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.time.LocalDateTime;
-
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
 
@@ -57,7 +52,8 @@ public class Parody extends Model<Parody> {
     private Integer materialId;
 
     @ApiModelProperty(value = "用户id")
-    @TableField("userId")
+    @JsonIgnore
+    @TableField(value = "userId", updateStrategy = FieldStrategy.NEVER)
     private Integer userId;
 
     @TableField("state")

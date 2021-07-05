@@ -47,7 +47,7 @@ public class ParodyController {
     }
 
     @ApiOperation("修改仿写")
-    @PutMapping("/updateparodys/{parodyId}")
+    @PutMapping("/parodys/{parodyId}")
     public Result update(
             @RequestBody @Validated Parody parody
 

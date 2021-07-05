@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -40,7 +41,8 @@ public class Material extends Model<Material> {
     private String content;
 
     @ApiModelProperty(value = "用户id")
-    @TableField("userId")
+    @TableField(value = "userId", updateStrategy = FieldStrategy.NEVER)
+    @JsonIgnore
     private Integer userId;
 
     @TableField("state")
@@ -71,6 +73,10 @@ public class Material extends Model<Material> {
     @JsonIgnore
     @TableField(exist = false)
     private Integer offset;
+
+    @TableField(exist = false)
+    private List<Integer> typeIds;
+
 
     @Override
     protected Serializable pkVal() {

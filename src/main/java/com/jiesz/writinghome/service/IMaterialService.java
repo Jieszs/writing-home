@@ -26,4 +26,5 @@ public interface IMaterialService extends IService<Material> {
     Integer count(Material material);
 
 
+    Boolean insert(Material material);
 }

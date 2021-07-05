@@ -30,7 +30,7 @@ public class MaterialTypeController {
     private IMaterialTypeService iMaterialTypeService;
 
     @ApiOperation("添加素材分类")
-    @PostMapping("/materialtypes")
+    @PostMapping("/materialTypes")
     public Result<MaterialType> insert(
             @RequestBody @Validated MaterialType materialType
     ) {
@@ -39,7 +39,7 @@ public class MaterialTypeController {
     }
 
     @ApiOperation("修改素材分类")
-    @PutMapping("/updatematerialtypes/{typeId}")
+    @PutMapping("/materialTypes/{typeId}")
     public Result update(
             @RequestBody @Validated MaterialType materialType
 
@@ -53,7 +53,7 @@ public class MaterialTypeController {
 
 
     @ApiOperation("获取素材分类树")
-    @GetMapping("/materialtypes/tree")
+    @GetMapping("/materialTypes/tree")
     public Result
             <List<MaterialType>> getTree(
             @RequestParam @ApiParam(value = "用户id", required = true) Integer userId
@@ -66,7 +66,7 @@ public class MaterialTypeController {
     }
 
     @ApiOperation("获取素材分类详情")
-    @GetMapping("/materialtypes/{typeId}")
+    @GetMapping("/materialTypes/{typeId}")
     public Result<MaterialType> get(
             @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId
     ) {
@@ -79,7 +79,7 @@ public class MaterialTypeController {
     }
 
     @ApiOperation("删除素材分类")
-    @DeleteMapping("/materialtypes/{typeId}")
+    @DeleteMapping("/materialTypes/{typeId}")
     public Result delete(
             @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId
     ) {
