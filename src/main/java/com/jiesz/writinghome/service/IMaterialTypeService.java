@@ -42,6 +42,7 @@ public interface IMaterialTypeService extends IService<MaterialType> {
 
     /**
      * 上移
+     *
      * @param materialType
      * @return
      */
@@ -49,6 +50,7 @@ public interface IMaterialTypeService extends IService<MaterialType> {
 
     /**
      * 下移
+     *
      * @param materialType
      * @return
      */
@@ -56,6 +58,7 @@ public interface IMaterialTypeService extends IService<MaterialType> {
 
     /**
      * 获取当前最大值
+     *
      * @param parentId
      * @param userId
      * @return

@@ -86,7 +86,7 @@ public class TokenUtil {
     }
 
     public static void main(String[] args) throws Exception {
-       String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudElkIjoiNDAiLCJwYXNzd29yZCI6InBhNDR3MHJkIiwiYWdlbnRUeXBlIjoiMiIsImFnZW50TmFtZSI6IuiSi-aZqOm-mSIsImlzQWRtaW4iOiJmYWxzZSIsImV4cCI6MTU1OTY2NzYxNCwiaWF0IjoxNTU5NjM4ODE0LCJ1c2VybmFtZSI6ImppYW5nY2hlbmxvbmcifQ.5Kq5BbY_J_JHdU9cB7pp5Uq6nzKnsJL8VWmAuCgHunM";
+        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudElkIjoiNDAiLCJwYXNzd29yZCI6InBhNDR3MHJkIiwiYWdlbnRUeXBlIjoiMiIsImFnZW50TmFtZSI6IuiSi-aZqOm-mSIsImlzQWRtaW4iOiJmYWxzZSIsImV4cCI6MTU1OTY2NzYxNCwiaWF0IjoxNTU5NjM4ODE0LCJ1c2VybmFtZSI6ImppYW5nY2hlbmxvbmcifQ.5Kq5BbY_J_JHdU9cB7pp5Uq6nzKnsJL8VWmAuCgHunM";
         Map<String, Claim> map = parse(token);
         System.out.println(map.get("agentType").asString());
         System.out.println(map.get("agentName").asString());

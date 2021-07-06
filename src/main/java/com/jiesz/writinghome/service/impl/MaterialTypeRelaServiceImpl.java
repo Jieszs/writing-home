@@ -1,16 +1,14 @@
 package com.jiesz.writinghome.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiesz.writinghome.entity.MaterialTypeRela;
 import com.jiesz.writinghome.mapper.MaterialTypeRelaMapper;
 import com.jiesz.writinghome.service.IMaterialTypeRelaService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * <p>

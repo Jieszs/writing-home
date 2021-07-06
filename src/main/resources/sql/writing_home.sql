@@ -78,3 +78,15 @@ CREATE TABLE `parody`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '仿写' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE `user_info` (
+  `userId` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `nickname` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '昵称',
+  `email` varchar(100) COLLATE utf8mb4_bin NOT NULL COMMENT '邮箱',
+  `username` varchar(20) COLLATE utf8mb4_bin NOT NULL COMMENT '账号',
+  `password` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
+  `state` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+  `insertTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户信息';

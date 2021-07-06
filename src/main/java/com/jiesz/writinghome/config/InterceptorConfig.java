@@ -1,7 +1,6 @@
 package com.jiesz.writinghome.config;
 
 
-
 import com.jiesz.writinghome.common.Namespace;
 import com.jiesz.writinghome.handle.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;

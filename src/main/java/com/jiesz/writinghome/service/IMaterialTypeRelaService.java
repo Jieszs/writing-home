@@ -1,7 +1,7 @@
 package com.jiesz.writinghome.service;
 
-import com.jiesz.writinghome.entity.MaterialTypeRela;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiesz.writinghome.entity.MaterialTypeRela;
 
 import java.util.List;
 

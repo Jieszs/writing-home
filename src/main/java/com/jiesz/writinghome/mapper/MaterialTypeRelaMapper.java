@@ -1,7 +1,7 @@
 package com.jiesz.writinghome.mapper;
 
-import com.jiesz.writinghome.entity.MaterialTypeRela;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jiesz.writinghome.entity.MaterialTypeRela;
 
 import java.util.List;
 

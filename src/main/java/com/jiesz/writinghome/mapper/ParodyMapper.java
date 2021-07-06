@@ -1,7 +1,7 @@
 package com.jiesz.writinghome.mapper;
 
-import com.jiesz.writinghome.entity.Parody;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jiesz.writinghome.entity.Parody;
 
 import java.util.List;
 

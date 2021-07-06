@@ -1,26 +1,26 @@
 package com.jiesz.writinghome.mapper;
 
+import com.jiesz.writinghome.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jiesz.writinghome.entity.Material;
 
 import java.util.List;
 
 /**
  * <p>
- * 素材 Mapper 接口
+ * 用户信息 Mapper 接口
  * </p>
  *
  * @author Jiesz
- * @since 2021-07-02
+ * @since 2021-07-06
  */
-public interface MaterialMapper extends BaseMapper<Material> {
+public interface UserMapper extends BaseMapper<User> {
     /**
      * 获取列表
      */
-    List<Material> list(Material material);
+    List<User> list(User user);
 
     /**
      * 获取总数
      */
-    Integer count(Material material);
+    Integer count(User user);
 }

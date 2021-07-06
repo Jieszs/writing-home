@@ -2,24 +2,15 @@ package com.jiesz.writinghome.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-
-import java.time.LocalDateTime;
-
-import java.io.Serializable;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
-import lombok.Builder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.baomidou.mybatisplus.annotation.FieldStrategy.IGNORED;
 
 /**
  * <p>
