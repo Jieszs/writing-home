@@ -57,9 +57,9 @@ public class TokenApi {
      */
     private String generateToken(User user) {
         Map<String, String> data = new HashMap<>(8);
-        data.put("userId",user.getUserId().toString());
-        data.put("nickname",user.getNickname());
-        data.put("email",user.getEmail());
+        data.put("userId", user.getUserId().toString());
+        data.put("nickname", user.getNickname());
+        data.put("email", user.getEmail());
         return TokenUtil.createToken(data);
     }
 

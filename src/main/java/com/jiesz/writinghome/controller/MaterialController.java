@@ -1,10 +1,13 @@
 package com.jiesz.writinghome.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiesz.writinghome.common.TokenKey;
 import com.jiesz.writinghome.common.bean.Result;
 import com.jiesz.writinghome.common.enums.ResultCode;
 import com.jiesz.writinghome.entity.Material;
 import com.jiesz.writinghome.service.IMaterialService;
+import com.jiesz.writinghome.service.IMaterialTypeService;
+import com.jiesz.writinghome.util.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,11 +34,19 @@ public class MaterialController {
     @Resource
     private IMaterialService iMaterialService;
 
+    @Resource
+    private IMaterialTypeService materialTypeService;
+
     @ApiOperation("添加素材")
     @PostMapping("/materials")
     public Result<Material> insert(
             @RequestBody @Validated Material material
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+        material.setUserId(userId);
+        if (!materialTypeService.validateTypeIds(material.getTypeIds(), userId)) {
+            return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "素材分类不合法");
+        }
         iMaterialService.insert(material);
         return Result.success(material);
     }
@@ -45,6 +56,10 @@ public class MaterialController {
     public Result update(
             @RequestBody @Validated Material material
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+        if (!materialTypeService.validateTypeIds(material.getTypeIds(), userId)) {
+            return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "素材分类不合法");
+        }
         if (null == material.selectById()) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
@@ -56,11 +71,12 @@ public class MaterialController {
     @GetMapping("/materials")
     public Result<Page<Material>> list(
             @RequestParam(required = false) @ApiParam(value = "素材内容") String content,
-            @RequestParam(required = false) @ApiParam(value = "用户id") Integer userId,
             @RequestParam(required = false) @ApiParam(value = "来源") String source,
             @RequestParam(defaultValue = "0") @ApiParam(value = "偏移量") Integer offset,
             @RequestParam(defaultValue = "10") @ApiParam(value = "限制") Integer limit
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+
         Material condition = Material.builder()
                 .content(content)
                 .userId(userId)

@@ -10,7 +10,11 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.jiesz.writinghome.exception.UnauthorizedException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -83,6 +87,18 @@ public class TokenUtil {
         } catch (JWTDecodeException | SignatureVerificationException e) {
             return -1;
         }
+    }
+
+    /**
+     * 从token中获取值
+     *
+     * @param key
+     * @return
+     */
+    public static String getFromToken(String key) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        return TokenUtil.parse(token).get(key).asString();
     }
 
     public static void main(String[] args) throws Exception {

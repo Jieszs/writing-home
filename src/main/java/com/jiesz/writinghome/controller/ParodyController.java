@@ -1,10 +1,12 @@
 package com.jiesz.writinghome.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jiesz.writinghome.common.TokenKey;
 import com.jiesz.writinghome.common.bean.Result;
 import com.jiesz.writinghome.common.enums.ResultCode;
 import com.jiesz.writinghome.entity.Parody;
 import com.jiesz.writinghome.service.IParodyService;
+import com.jiesz.writinghome.util.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -36,6 +38,8 @@ public class ParodyController {
     public Result<Parody> insert(
             @RequestBody @Validated Parody parody
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+        parody.setUserId(userId);
         parody.insert();
         return Result.success(parody);
     }
@@ -58,10 +62,10 @@ public class ParodyController {
     public Result
             <Page<Parody>> list(
             @RequestParam(required = false) @ApiParam(value = "素材id") Integer materialId,
-            @RequestParam(required = false) @ApiParam(value = "用户id") Integer userId,
             @RequestParam(defaultValue = "0") @ApiParam(value = "偏移量") Integer offset,
             @RequestParam(defaultValue = "10") @ApiParam(value = "限制") Integer limit
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
         Parody condition = Parody.builder()
                 .materialId(materialId)
                 .userId(userId)

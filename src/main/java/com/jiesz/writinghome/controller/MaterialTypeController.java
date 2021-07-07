@@ -1,9 +1,11 @@
 package com.jiesz.writinghome.controller;
 
+import com.jiesz.writinghome.common.TokenKey;
 import com.jiesz.writinghome.common.bean.Result;
 import com.jiesz.writinghome.common.enums.ResultCode;
 import com.jiesz.writinghome.entity.MaterialType;
 import com.jiesz.writinghome.service.IMaterialTypeService;
+import com.jiesz.writinghome.util.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.jiesz.writinghome.common.enums.ResultCode.DATA_ALREADY_EXISTED;
 
 /**
  * <p>
@@ -34,6 +38,11 @@ public class MaterialTypeController {
     public Result<MaterialType> insert(
             @RequestBody @Validated MaterialType materialType
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+        if (iMaterialTypeService.existTypeName(materialType.getTypeName(), userId)) {
+            return Result.fail(DATA_ALREADY_EXISTED.getCode(), "素材分类名称已存在");
+        }
+        materialType.setUserId(userId);
         materialType.setOrderId(iMaterialTypeService.getMaxOrderId(materialType.getParentId(), materialType.getUserId()) + 1);
         materialType.insert();
         return Result.success(materialType);
@@ -45,8 +54,13 @@ public class MaterialTypeController {
             @RequestBody @Validated MaterialType materialType
 
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+
         if (null == materialType.selectById()) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        if (iMaterialTypeService.existTypeName(materialType.getTypeId(), materialType.getTypeName(), userId)) {
+            return Result.fail(DATA_ALREADY_EXISTED.getCode(), "素材分类名称已存在");
         }
         materialType.updateById();
         return Result.success();
@@ -57,8 +71,8 @@ public class MaterialTypeController {
     @GetMapping("/materialTypes/tree")
     public Result
             <List<MaterialType>> getTree(
-            @RequestParam @ApiParam(value = "用户id", required = true) Integer userId
     ) {
+        Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
         MaterialType condition = MaterialType.builder()
                 .userId(userId)
                 .build();
@@ -84,11 +98,34 @@ public class MaterialTypeController {
     public Result delete(
             @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId
     ) {
-        MaterialType condition = MaterialType.builder().typeId(typeId).build();
-        if (condition.selectById() == null) {
-            return Result.fail(ResultCode.DATA_NOT_FOUND);
-        }
+        MaterialType condition = iMaterialTypeService.getById(typeId);
         iMaterialTypeService.delete(condition);
         return Result.success("删除成功");
+    }
+
+    @ApiOperation("上移素材分类")
+    @PutMapping("/materialTypes/{typeId}/up")
+    public Result up(
+            @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId
+    ) {
+        MaterialType type = iMaterialTypeService.getById(typeId);
+        if (null == type) {
+            return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        iMaterialTypeService.up(type);
+        return Result.success();
+    }
+
+    @ApiOperation("修改素材分类")
+    @PutMapping("/materialTypes/{typeId}/down")
+    public Result down(
+            @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId
+    ) {
+        MaterialType type = iMaterialTypeService.getById(typeId);
+        if (null == type) {
+            return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        iMaterialTypeService.down(type);
+        return Result.success();
     }
 }

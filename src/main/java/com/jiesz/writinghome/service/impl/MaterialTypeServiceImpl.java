@@ -1,5 +1,6 @@
 package com.jiesz.writinghome.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiesz.writinghome.entity.MaterialType;
@@ -49,9 +50,10 @@ public class MaterialTypeServiceImpl extends ServiceImpl<MaterialTypeMapper, Mat
      * 添加时判重
      */
     @Override
-    public boolean existTypeName(String typeName) {
+    public boolean existTypeName(String typeName, Integer userId) {
         MaterialType condition = MaterialType.builder()
                 .typeName(typeName)
+                .userId(userId)
                 .build();
         List<MaterialType> list = list(condition);
         if (!CollectionUtils.isEmpty(list)) {
@@ -64,9 +66,10 @@ public class MaterialTypeServiceImpl extends ServiceImpl<MaterialTypeMapper, Mat
      * 修改时判重
      */
     @Override
-    public boolean existTypeName(Integer typeId, String typeName) {
+    public boolean existTypeName(Integer typeId, String typeName, Integer userId) {
         MaterialType condition = MaterialType.builder()
                 .typeName(typeName)
+                .userId(userId)
                 .build();
         List<MaterialType> list = list(condition);
         if (!CollectionUtils.isEmpty(list) && !list.get(0).getTypeId().equals(typeId)) {
@@ -115,10 +118,23 @@ public class MaterialTypeServiceImpl extends ServiceImpl<MaterialTypeMapper, Mat
 
     @Override
     public void delete(MaterialType condition) {
+
+        List<MaterialType> list = materialTypeMapper.selectList(new QueryWrapper<MaterialType>().
+                lambda().
+                eq(MaterialType::getParentId, condition.getParentId()).
+                gt(MaterialType::getOrderId, condition.getOrderId()));
         condition.deleteById();
-        List<MaterialType> list = materialTypeMapper.selectList(new QueryWrapper<MaterialType>().lambda().eq(MaterialType::getParentId, condition.getParentId()).gt(MaterialType::getOrderId, condition.getOrderId()));
         list = list.stream().peek(t -> t.setOrderId(t.getOrderId() - 1)).collect(Collectors.toList());
         this.updateBatchById(list);
+    }
+
+    @Override
+    public boolean validateTypeIds(List<Integer> typeIds, Integer userId) {
+        if (CollectionUtils.isEmpty(typeIds)) {
+            return false;
+        }
+        LambdaQueryWrapper<MaterialType> wrapper = new LambdaQueryWrapper<MaterialType>().in(MaterialType::getTypeId, typeIds).eq(MaterialType::getUserId, userId);
+        return this.count(wrapper) == typeIds.size();
     }
 
     /**

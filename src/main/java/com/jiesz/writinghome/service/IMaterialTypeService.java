@@ -33,12 +33,12 @@ public interface IMaterialTypeService extends IService<MaterialType> {
     /**
      * 添加时判重
      */
-    boolean existTypeName(String typeName);
+    boolean existTypeName(String typeName, Integer userId);
 
     /**
      * 修改时判重
      */
-    boolean existTypeName(Integer typeId, String typeName);
+    boolean existTypeName(Integer typeId, String typeName, Integer userId);
 
     /**
      * 上移
@@ -66,4 +66,6 @@ public interface IMaterialTypeService extends IService<MaterialType> {
     Integer getMaxOrderId(Integer parentId, Integer userId);
 
     void delete(MaterialType condition);
+
+    boolean validateTypeIds(List<Integer> typeIds, Integer userId);
 }
