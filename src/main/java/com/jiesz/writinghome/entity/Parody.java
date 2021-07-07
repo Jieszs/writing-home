@@ -40,7 +40,7 @@ public class Parody extends Model<Parody> {
     private String content;
 
     @ApiModelProperty(value = "素材id")
-    @TableField("materialId")
+    @TableField(value = "materialId", updateStrategy = FieldStrategy.NEVER)
     private Integer materialId;
 
     @ApiModelProperty(value = "用户id")
@@ -57,7 +57,7 @@ public class Parody extends Model<Parody> {
     private Boolean state;
 
     @ApiModelProperty(value = "插入时间")
-    @TableField("insertTime")
+    @TableField(value = "insertTime", updateStrategy = FieldStrategy.NEVER)
     private LocalDateTime insertTime;
 
     @ApiModelProperty(value = "更新时间")

@@ -57,7 +57,7 @@ public class Material extends Model<Material> {
     private String source;
 
     @ApiModelProperty(value = "插入时间")
-    @TableField("insertTime")
+    @TableField(value = "insertTime", updateStrategy = FieldStrategy.NEVER)
     private String insertTime;
 
     @ApiModelProperty(value = "更新时间")
