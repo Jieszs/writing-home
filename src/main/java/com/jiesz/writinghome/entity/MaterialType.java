@@ -41,7 +41,7 @@ public class MaterialType extends Model<MaterialType> {
     private String typeName;
 
     @ApiModelProperty(value = "父亲id")
-    @TableField(value = "parentId", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "parentId")
     private Integer parentId;
 
     @ApiModelProperty(value = "排序值，小的在前")
@@ -49,12 +49,12 @@ public class MaterialType extends Model<MaterialType> {
     private Integer orderId;
 
     @ApiModelProperty(value = "用户id")
-    @TableField(value = "userId", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "userId")
     @JsonIgnore
     private Integer userId;
 
     @ApiModelProperty(value = "插入时间")
-    @TableField(value = "insertTime", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "insertTime")
     private LocalDateTime insertTime;
 
     @ApiModelProperty(value = "更新时间")

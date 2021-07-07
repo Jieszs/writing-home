@@ -40,12 +40,12 @@ public class Parody extends Model<Parody> {
     private String content;
 
     @ApiModelProperty(value = "素材id")
-    @TableField(value = "materialId", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "materialId")
     private Integer materialId;
 
     @ApiModelProperty(value = "用户id")
     @JsonIgnore
-    @TableField(value = "userId", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "userId")
     private Integer userId;
 
     @TableField("state")

@@ -40,7 +40,7 @@ public class Material extends Model<Material> {
     private String content;
 
     @ApiModelProperty(value = "用户id")
-    @TableField(value = "userId", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "userId")
     @JsonIgnore
     private Integer userId;
 
@@ -57,7 +57,7 @@ public class Material extends Model<Material> {
     private String source;
 
     @ApiModelProperty(value = "插入时间")
-    @TableField(value = "insertTime", updateStrategy = FieldStrategy.NEVER)
+    @TableField(value = "insertTime")
     private String insertTime;
 
     @ApiModelProperty(value = "更新时间")
@@ -74,6 +74,7 @@ public class Material extends Model<Material> {
     private Integer offset;
 
     @TableField(exist = false)
+    @JsonIgnore
     private List<Integer> typeIds;
 
 

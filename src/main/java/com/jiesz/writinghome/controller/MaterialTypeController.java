@@ -36,14 +36,20 @@ public class MaterialTypeController {
     @ApiOperation("添加素材分类")
     @PostMapping("/materialTypes")
     public Result<MaterialType> insert(
-            @RequestBody @Validated MaterialType materialType
+            @RequestParam @ApiParam(value = "分类名称", required = true) String typeName,
+            @RequestParam @ApiParam(value = "父亲id", required = true) Integer parentId
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
-        if (iMaterialTypeService.existTypeName(materialType.getTypeName(), userId)) {
+        if (iMaterialTypeService.existTypeName(typeName, userId)) {
             return Result.fail(DATA_ALREADY_EXISTED.getCode(), "素材分类名称已存在");
         }
-        materialType.setUserId(userId);
-        materialType.setOrderId(iMaterialTypeService.getMaxOrderId(materialType.getParentId(), materialType.getUserId()) + 1);
+        MaterialType materialType = MaterialType.builder()
+                .userId(userId)
+                .typeName(typeName)
+                .parentId(parentId)
+                .orderId(iMaterialTypeService.getMaxOrderId(parentId, userId))
+                .build();
+
         materialType.insert();
         return Result.success(materialType);
     }
@@ -51,15 +57,16 @@ public class MaterialTypeController {
     @ApiOperation("修改素材分类")
     @PutMapping("/materialTypes/{typeId}")
     public Result update(
-            @RequestBody @Validated MaterialType materialType
-
+            @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId,
+            @RequestParam @ApiParam(value = "分类名称", required = true) String typeName
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+        MaterialType materialType = iMaterialTypeService.getById(typeId);
 
-        if (null == materialType.selectById()) {
+        if (null == materialType) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        if (iMaterialTypeService.existTypeName(materialType.getTypeId(), materialType.getTypeName(), userId)) {
+        if (iMaterialTypeService.existTypeName(typeId, typeName, userId)) {
             return Result.fail(DATA_ALREADY_EXISTED.getCode(), "素材分类名称已存在");
         }
         materialType.updateById();
@@ -116,7 +123,7 @@ public class MaterialTypeController {
         return Result.success();
     }
 
-    @ApiOperation("修改素材分类")
+    @ApiOperation("下移素材分类")
     @PutMapping("/materialTypes/{typeId}/down")
     public Result down(
             @PathVariable @ApiParam(value = "主键id", required = true) Integer typeId

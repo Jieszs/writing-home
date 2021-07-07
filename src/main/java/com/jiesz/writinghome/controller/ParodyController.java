@@ -36,10 +36,15 @@ public class ParodyController {
     @ApiOperation("添加仿写")
     @PostMapping("/parodys")
     public Result<Parody> insert(
-            @RequestBody @Validated Parody parody
+            @RequestParam @ApiParam(value = "内容", required = true) String content,
+            @RequestParam @ApiParam(value = "素材id", required = true) Integer materialId
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
-        parody.setUserId(userId);
+        Parody parody = Parody.builder()
+                .materialId(materialId)
+                .userId(userId)
+                .content(content)
+                .build();
         parody.insert();
         return Result.success(parody);
     }
@@ -47,12 +52,16 @@ public class ParodyController {
     @ApiOperation("修改仿写")
     @PutMapping("/parodys/{parodyId}")
     public Result update(
-            @RequestBody @Validated Parody parody
-
+            @PathVariable @ApiParam(value = "主键id", required = true) Integer parodyId,
+            @RequestParam @ApiParam(value = "内容", required = true) String content
     ) {
-        if (null == parody.selectById()) {
+        if (null == iParodyService.getById(parodyId)) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
+        Parody parody = Parody.builder()
+                .parodyId(parodyId)
+                .content(content)
+                .build();
         parody.updateById();
         return Result.success();
     }

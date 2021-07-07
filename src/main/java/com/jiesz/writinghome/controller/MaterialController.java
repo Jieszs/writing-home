@@ -40,9 +40,16 @@ public class MaterialController {
     @ApiOperation("添加素材")
     @PostMapping("/materials")
     public Result<Material> insert(
-            @RequestBody @Validated Material material
+            @RequestParam @ApiParam(value = "素材内容", required = true) String content,
+            @RequestParam @ApiParam(value = "来源", required = true) String source,
+            @RequestParam @ApiParam(value = "分类id", required = true) List<Integer> typeIds
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
+        Material material = Material.builder()
+                .content(content)
+                .source(source)
+                .typeIds(typeIds)
+                .build();
         material.setUserId(userId);
         if (!materialTypeService.validateTypeIds(material.getTypeIds(), userId)) {
             return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "素材分类不合法");
@@ -54,15 +61,24 @@ public class MaterialController {
     @ApiOperation("修改素材")
     @PutMapping("/materials/{materialId}")
     public Result update(
-            @RequestBody @Validated Material material
+            @PathVariable @ApiParam(value = "主键id", required = true) Integer materialId,
+            @RequestParam @ApiParam(value = "素材内容", required = true) String content,
+            @RequestParam @ApiParam(value = "来源", required = true) String source,
+            @RequestParam @ApiParam(value = "分类id", required = true) List<Integer> typeIds
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
-        if (!materialTypeService.validateTypeIds(material.getTypeIds(), userId)) {
+        if (!materialTypeService.validateTypeIds(typeIds, userId)) {
             return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "素材分类不合法");
         }
-        if (null == material.selectById()) {
+        if (null == iMaterialService.getById(materialId)) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
+        Material material = Material.builder()
+                .content(content)
+                .source(source)
+                .typeIds(typeIds)
+                .materialId(materialId)
+                .build();
         iMaterialService.update(material);
         return Result.success();
     }
