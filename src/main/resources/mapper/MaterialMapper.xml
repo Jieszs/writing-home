@@ -52,6 +52,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         <include refid="where"/>
+        ORDER BY insertTime DESC
         <if test="offset !=null and limit !=null">
             LIMIT #{offset},#{limit}
         </if>

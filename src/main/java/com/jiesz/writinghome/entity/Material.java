@@ -63,6 +63,14 @@ public class Material extends Model<Material> {
     @ApiModelProperty(value = "更新时间")
     @TableField("updateTime")
     private String updateTime;
+
+    @ApiModelProperty(value = "素材分类名称")
+    @TableField(exist = false)
+    private List<String> typeNames;
+
+    @ApiModelProperty(value = "仿写列表")
+    @TableField(exist = false)
+    private List<String> parodies;
     /**
      * 非数据库字段
      */

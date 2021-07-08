@@ -119,8 +119,7 @@ public class MaterialController {
     public Result<Material> get(
             @PathVariable @ApiParam(value = "主键id", required = true) Integer materialId
     ) {
-        Material condition = Material.builder().materialId(materialId).build();
-        Material result = condition.selectById();
+        Material result = iMaterialService.getDetail(materialId);
         if (result == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }

@@ -68,4 +68,7 @@ public interface IMaterialTypeService extends IService<MaterialType> {
     void delete(MaterialType condition);
 
     boolean validateTypeIds(List<Integer> typeIds, Integer userId);
+
+
+    List<String> listByMaterialId(Integer materialId);
 }

@@ -29,4 +29,6 @@ public interface IMaterialService extends IService<Material> {
     Boolean insert(Material material);
 
     Boolean update(Material material);
+
+    Material getDetail(Integer materialId);
 }

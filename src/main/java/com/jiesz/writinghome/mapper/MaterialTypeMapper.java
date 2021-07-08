@@ -25,4 +25,6 @@ public interface MaterialTypeMapper extends BaseMapper<MaterialType> {
     Integer count(MaterialType materialType);
 
     Integer getMaxOrderId(Integer parentId, Integer userId);
+
+    List<String> listByMaterialId();
 }

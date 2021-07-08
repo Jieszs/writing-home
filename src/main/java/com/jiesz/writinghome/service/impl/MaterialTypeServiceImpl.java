@@ -137,6 +137,11 @@ public class MaterialTypeServiceImpl extends ServiceImpl<MaterialTypeMapper, Mat
         return this.count(wrapper) == typeIds.size();
     }
 
+    @Override
+    public List<String> listByMaterialId(Integer materialId) {
+        return materialTypeMapper.listByMaterialId();
+    }
+
     /**
      * 获取树
      */
