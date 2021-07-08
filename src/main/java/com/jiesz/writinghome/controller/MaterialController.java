@@ -1,5 +1,6 @@
 package com.jiesz.writinghome.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiesz.writinghome.common.TokenKey;
 import com.jiesz.writinghome.common.bean.Result;
@@ -11,6 +12,7 @@ import com.jiesz.writinghome.util.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,16 +44,18 @@ public class MaterialController {
     public Result<Material> insert(
             @RequestParam @ApiParam(value = "素材内容", required = true) String content,
             @RequestParam @ApiParam(value = "来源", required = true) String source,
-            @RequestParam @ApiParam(value = "分类id", required = true) List<Integer> typeIds
+            @RequestParam @ApiParam(value = "父级素材Id（0-本素材不是仿写）", required = true) Integer parentId,
+            @RequestParam(required = false) @ApiParam(value = "分类id") List<Integer> typeIds
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
         Material material = Material.builder()
                 .content(content)
                 .source(source)
+                .parentId(parentId)
                 .typeIds(typeIds)
                 .build();
         material.setUserId(userId);
-        if (!materialTypeService.validateTypeIds(material.getTypeIds(), userId)) {
+        if (!CollectionUtils.isEmpty(typeIds) && !materialTypeService.validateTypeIds(material.getTypeIds(), userId)) {
             return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "素材分类不合法");
         }
         iMaterialService.insert(material);
@@ -62,12 +66,12 @@ public class MaterialController {
     @PutMapping("/materials/{materialId}")
     public Result update(
             @PathVariable @ApiParam(value = "主键id", required = true) Integer materialId,
-            @RequestParam @ApiParam(value = "素材内容", required = true) String content,
-            @RequestParam @ApiParam(value = "来源", required = true) String source,
-            @RequestParam @ApiParam(value = "分类id", required = true) List<Integer> typeIds
+            @RequestParam(required = false) @ApiParam(value = "素材内容") String content,
+            @RequestParam(required = false) @ApiParam(value = "来源") String source,
+            @RequestParam(required = false) @ApiParam(value = "分类id") List<Integer> typeIds
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
-        if (!materialTypeService.validateTypeIds(typeIds, userId)) {
+        if (!CollectionUtils.isEmpty(typeIds) && !materialTypeService.validateTypeIds(typeIds, userId)) {
             return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "素材分类不合法");
         }
         if (null == iMaterialService.getById(materialId)) {
@@ -86,8 +90,10 @@ public class MaterialController {
     @ApiOperation("获取素材列表")
     @GetMapping("/materials")
     public Result<Page<Material>> list(
-            @RequestParam(required = false) @ApiParam(value = "素材内容") String content,
+            @RequestParam(required = false) @ApiParam(value = "素材内容模糊匹配") String content,
             @RequestParam(required = false) @ApiParam(value = "来源") String source,
+            @RequestParam(required = false) @ApiParam(value = "父级素材Id（0-本素材不是仿写）") Integer parentId,
+            @RequestParam(required = false) @ApiParam(value = "类别") List<Integer> typeIds,
             @RequestParam(defaultValue = "0") @ApiParam(value = "偏移量") Integer offset,
             @RequestParam(defaultValue = "10") @ApiParam(value = "限制") Integer limit
     ) {
@@ -96,7 +102,9 @@ public class MaterialController {
         Material condition = Material.builder()
                 .content(content)
                 .userId(userId)
+                .parentId(parentId)
                 .source(source)
+                .typeIds(typeIds)
                 .build();
         Integer total = iMaterialService.count(condition);
         List<Material> list = new ArrayList<>();
@@ -134,6 +142,10 @@ public class MaterialController {
         Material condition = Material.builder().materialId(materialId).build();
         if (condition.selectById() == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        List<Material> materials = iMaterialService.list(new LambdaQueryWrapper<Material>().eq(Material::getParentId, materialId));
+        if (!CollectionUtils.isEmpty(materials)) {
+            return Result.fail(ResultCode.PARAM_VALID_ERROR.getCode(), "存在仿写素材，不允许删除");
         }
         condition.deleteById();
         return Result.success("删除成功");

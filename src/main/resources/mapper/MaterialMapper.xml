@@ -15,19 +15,22 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        materialId, content, userId, state, source, insertTime, updateTime
+        materialId, content, userId,parentId, state, source, insertTime, updateTime
     </sql>
 
     <!--查询条件-->
     <sql id="where">
-        FROM material
+        FROM material a
         <where>
             state = 1
             <if test="materialId!=null and materialId!=''">
                 AND materialId = #{materialId}
             </if>
             <if test="content!=null and content!=''">
-                AND content = #{content}
+                AND content LIKE "%"#{content}"%"
+            </if>
+            <if test="parentId!=null">
+                AND parentId = #{parentId}
             </if>
             <if test="userId!=null and userId!=''">
                 AND userId = #{userId}
@@ -43,6 +46,17 @@
             </if>
             <if test="updateTime!=null and updateTime!=''">
                 AND updateTime = #{updateTime}
+            </if>
+            <if test="typeIds != null and typeIds.size >0 ">
+                AND materialId IN(
+                SELECT materialId
+                FROM material_type_rela
+                WHERE typeId IN
+                <foreach item="item" index="index" collection="typeIds"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
             </if>
         </where>
     </sql>

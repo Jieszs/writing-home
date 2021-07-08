@@ -44,6 +44,10 @@ public class Material extends Model<Material> {
     @JsonIgnore
     private Integer userId;
 
+    @ApiModelProperty(value = "父级素材Id（0-本素材不是仿写）")
+    @TableField(value = "parentId")
+    private Integer parentId;
+
     @TableField("state")
     /**
      *  逻辑删除字段 1正常0删除
@@ -67,6 +71,10 @@ public class Material extends Model<Material> {
     @ApiModelProperty(value = "素材分类名称")
     @TableField(exist = false)
     private List<String> typeNames;
+
+    @ApiModelProperty(value = "父级素材")
+    @TableField(exist = false)
+    private String masterContent;
 
     @ApiModelProperty(value = "仿写列表")
     @TableField(exist = false)

@@ -1,16 +1,14 @@
 package com.jiesz.writinghome.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiesz.writinghome.entity.Material;
-import com.jiesz.writinghome.entity.MaterialType;
 import com.jiesz.writinghome.entity.MaterialTypeRela;
-import com.jiesz.writinghome.entity.Parody;
 import com.jiesz.writinghome.mapper.MaterialMapper;
 import com.jiesz.writinghome.service.IMaterialService;
 import com.jiesz.writinghome.service.IMaterialTypeRelaService;
 import com.jiesz.writinghome.service.IMaterialTypeService;
-import com.jiesz.writinghome.service.IParodyService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -38,9 +36,6 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> i
     private IMaterialTypeRelaService materialTypeRelaService;
 
     @Resource
-    private IParodyService parodyService;
-
-    @Resource
     private IMaterialTypeService materialTypeService;
 
 
@@ -63,6 +58,9 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> i
     @Override
     public Boolean insert(Material material) {
         boolean result = material.insert();
+        if (CollectionUtils.isEmpty(material.getTypeIds())) {
+            return result;
+        }
         List<MaterialTypeRela> materialTypeRelas = convertByIds(material.getTypeIds(), material.getMaterialId());
         materialTypeRelaService.saveBatch(materialTypeRelas);
         return result;
@@ -71,6 +69,9 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> i
     @Override
     public Boolean update(Material material) {
         boolean result = material.updateById();
+        if (CollectionUtils.isEmpty(material.getTypeIds())) {
+            return result;
+        }
         List<MaterialTypeRela> materialTypeRelas = convertByIds(material.getTypeIds(), material.getMaterialId());
         MaterialTypeRela condition = new MaterialTypeRela();
         condition.setMaterialId(material.getMaterialId());
@@ -84,12 +85,18 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> i
         Material result = this.getById(materialId);
         List<String> materialTypes = materialTypeService.listByMaterialId(materialId);
         result.setTypeNames(materialTypes);
-        List<Parody> parodies = parodyService.list(Parody.builder().materialId(materialId).build());
-        if (!CollectionUtils.isEmpty(parodies)) {
-            result.setParodies(parodies.stream()
-                    .map(Parody::getContent)
-                    .collect(Collectors.toList()));
+        if (result.getParentId() == 0) {
+            List<Material> materials = this.list(new LambdaQueryWrapper<Material>().eq(Material::getParentId, materialId));
+            if (!CollectionUtils.isEmpty(materials)) {
+                result.setParodies(materials.stream().map(Material::getContent).collect(Collectors.toList()));
+            }
+        } else {
+            Material master = this.getById(result.getParentId());
+            if (null != master) {
+                result.setMasterContent(master.getContent());
+            }
         }
+
         return result;
     }
 
