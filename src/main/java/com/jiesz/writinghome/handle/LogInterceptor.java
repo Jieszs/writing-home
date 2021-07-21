@@ -12,51 +12,31 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- * Created by jcl on 2020/12/23
- */
+
 @Component
 public class LogInterceptor implements ClientHttpRequestInterceptor {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        traceRequest(request, body);
-        ClientHttpResponse response = execution.execute(request, body);
-        traceResponse(response);
-        return response;
-    }
-
-    /**
-     * 打印请求信息
-     *
-     * @param request
-     * @param body
-     * @throws IOException
-     */
-    private void traceRequest(HttpRequest request, byte[] body) throws IOException {
-        logger.info("》》URI         : {}", Objects.requireNonNull(request.getMethod()).toString() + " " + request.getURI().toString());
-        request.getHeaders().keySet().forEach((key) -> {
-            logger.debug("》》Header      : {}", key + ":" + Objects.requireNonNull(request.getHeaders().get(key)).toString());
-        });
-        logger.info("》》Request body: {}", new String(body, StandardCharsets.UTF_8));
-    }
-
-    /**
-     * 响应数据
-     *
-     * @param response
-     * @throws IOException
-     */
-    private void traceResponse(ClientHttpResponse response) throws IOException {
-        logger.info("《《 Status       : {}", response.getStatusCode());
+        // 记录下请求内容
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n========================================== 开始请求第三方接口 ==========================================\n")
+                .append("Request Time   :").append(LocalDateTime.now().toString()).append("\n")
+                .append("URL            :").append(Objects.requireNonNull(request.getMethod()).toString()).append("   ").append(request.getURI().toString()).append("\n");
         if (logger.isDebugEnabled()) {
-            response.getHeaders().keySet().forEach((key) -> {
-                logger.debug("《《 Header      : {}", key + ":" + Objects.requireNonNull(response.getHeaders().get(key)).toString());
+            request.getHeaders().keySet().forEach((key) -> {
+                sb.append("Request Header   :").append(Objects.requireNonNull(request.getHeaders().get(key)).toString()).append("\n");
             });
         }
+        sb.append("Request body   : ").append(new String(body, StandardCharsets.UTF_8)).append("\n");
+        long startTime = System.currentTimeMillis();
+        // 执行请求
+        ClientHttpResponse response = execution.execute(request, body);
+        // 解析返回结果
         StringBuilder inputStringBuilder = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
             String line = bufferedReader.readLine();
@@ -67,8 +47,19 @@ public class LogInterceptor implements ClientHttpRequestInterceptor {
             }
         }
         String resp = inputStringBuilder.length() > 500 ? inputStringBuilder.substring(0, 500) : inputStringBuilder.toString();
-        logger.info("《《 Response body: {}", resp);
+        sb.append("Status  : ").append(response.getStatusCode()).append("\n");
+        sb.append("Response   :  ").append(resp).append("\n")
+                .append("Time-Consuming : ").append(System.currentTimeMillis() - startTime).append("ms\n")
+                .append("=========================================== End ===========================================\n");
+        // 执行耗时
+        if (logger.isDebugEnabled()) {
+            logger.debug(sb.toString());
+        } else {
+            logger.info(sb.toString());
+        }
+        return response;
     }
+
 
     public Logger getLogger() {
         return logger;
