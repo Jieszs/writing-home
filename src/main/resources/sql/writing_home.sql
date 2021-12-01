@@ -78,6 +78,25 @@ CREATE TABLE `material_operate_log`  (
 
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材操作日志' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for material_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `material_comment`;
+CREATE TABLE `material_comment` (
+  `commentId` int NOT NULL AUTO_INCREMENT COMMENT '评论id',
+  `materialId` int(11) NOT NULL COMMENT '素材id',
+  `comment` varchar(200)  DEFAULT NULL COMMENT '评论',
+  `userId` int(11) NOT NULL COMMENT '用户id',
+  `receiver` int(11) NOT NULL COMMENT '接收用户id',
+  `commentedId` int(11) NOT NULL COMMENT '被评论的id,（可以素材，也可以是评论）',
+  `insertTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `type` int NOT NULL COMMENT '1-评论素材 2-回复评论',
+  `state` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（1-正常 0-删除）',
+
+  PRIMARY KEY (`commentId`),
+  KEY `idx_materialId` (`materialId`),
+  KEY `idx_commentedId` (`commentedId`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT ='评论';
 
 -- ----------------------------
 -- Table structure for user_info

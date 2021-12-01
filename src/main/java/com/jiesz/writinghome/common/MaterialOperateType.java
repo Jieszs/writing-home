@@ -3,7 +3,6 @@ package com.jiesz.writinghome.common;
 /**
  * 素材操作类型
  *
- *
  * @author qq3434569
  */
 public class MaterialOperateType {
