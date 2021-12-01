@@ -45,7 +45,7 @@ public class MaterialOperateLog extends Model<MaterialOperateLog> {
     @TableField("userId")
     private Integer userId;
 
-    @ApiModelProperty(value = "操作类型（1-点赞 2-取消点赞 3-收藏 4-取消收藏 ）")
+    @ApiModelProperty(value = "操作类型（1-点赞 2-取消点赞 3-收藏  ）")
     @TableField("operateType")
     private Integer operateType;
 

@@ -71,7 +71,7 @@ CREATE TABLE `material_operate_log`  (
   `logId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `materialId` int(11) NOT NULL COMMENT '素材id',
   `userId` int(11) NOT NULL COMMENT '用户id',
-  `operateType` int(11) NOT NULL COMMENT '操作类型（1-点赞 2-取消点赞 3-收藏 4-取消收藏 ）',
+  `operateType` int(11) NOT NULL COMMENT '操作类型（1-点赞 2-取消点赞 3-收藏 ）',
   `insertTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   PRIMARY KEY (`logId`) USING BTREE,
   INDEX `idx_materialId`(`materialId`) USING BTREE
