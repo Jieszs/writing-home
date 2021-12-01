@@ -44,6 +44,11 @@ public class Material extends Model<Material> {
     @JsonIgnore
     private Integer userId;
 
+    @ApiModelProperty(value = "是否共享（1是0否）")
+    @TableField(value = "isPublic")
+    @JsonIgnore
+    private Integer isPublic;
+
     @ApiModelProperty(value = "父级素材Id（0-本素材不是仿写）")
     @TableField(value = "parentId")
     private Integer parentId;

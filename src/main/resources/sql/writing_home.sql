@@ -27,6 +27,7 @@ CREATE TABLE `material`  (
   `userId` int(11) NOT NULL COMMENT '用户id',
   `parentId` int(11) NOT NULL DEFAULT 0 COMMENT '父级素材Id（0-本素材不是仿写）',
   `state` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（1-正常 0-删除）',
+  `isPublic` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否共享（1是0否）',
   `source` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '来源',
   `insertTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '插入时间',
   `updateTime` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',

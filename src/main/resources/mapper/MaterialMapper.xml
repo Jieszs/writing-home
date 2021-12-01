@@ -8,6 +8,7 @@
         <result column="content" property="content"/>
         <result column="userId" property="userId"/>
         <result column="state" property="state"/>
+        <result column="isPublic" property="isPublic"/>
         <result column="source" property="source"/>
         <result column="insertTime" property="insertTime"/>
         <result column="updateTime" property="updateTime"/>
@@ -15,7 +16,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        materialId, content, userId,parentId, state, source, insertTime, updateTime
+        materialId, content, userId,parentId, state, source, insertTime, updateTime,isPublic
     </sql>
 
     <!--查询条件-->
@@ -31,6 +32,9 @@
             </if>
             <if test="parentId!=null">
                 AND parentId = #{parentId}
+            </if>
+            <if test="isPublic!=null">
+                AND isPublic = #{isPublic}
             </if>
             <if test="userId!=null and userId!=''">
                 AND userId = #{userId}

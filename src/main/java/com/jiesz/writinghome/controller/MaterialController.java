@@ -45,6 +45,7 @@ public class MaterialController {
             @RequestParam @ApiParam(value = "素材内容", required = true) String content,
             @RequestParam @ApiParam(value = "来源", required = true) String source,
             @RequestParam @ApiParam(value = "父级素材Id（0-本素材不是仿写）", required = true) Integer parentId,
+            @RequestParam @ApiParam(value = "是否共享（1是0否）", required = true) Integer isPublic,
             @RequestParam(required = false) @ApiParam(value = "分类id") List<Integer> typeIds
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
@@ -52,6 +53,7 @@ public class MaterialController {
                 .content(content)
                 .source(source)
                 .parentId(parentId)
+                .isPublic(isPublic)
                 .typeIds(typeIds)
                 .build();
         material.setUserId(userId);
@@ -68,6 +70,7 @@ public class MaterialController {
             @PathVariable @ApiParam(value = "主键id", required = true) Integer materialId,
             @RequestParam(required = false) @ApiParam(value = "素材内容") String content,
             @RequestParam(required = false) @ApiParam(value = "来源") String source,
+            @RequestParam(required = false) @ApiParam(value = "是否共享（1是0否）") Integer isPublic,
             @RequestParam(required = false) @ApiParam(value = "分类id") List<Integer> typeIds
     ) {
         Integer userId = Integer.parseInt(TokenUtil.getFromToken(TokenKey.USER_ID));
@@ -81,10 +84,42 @@ public class MaterialController {
                 .content(content)
                 .source(source)
                 .typeIds(typeIds)
+                .isPublic(isPublic)
                 .materialId(materialId)
                 .build();
         iMaterialService.update(material);
         return Result.success();
+    }
+    @ApiOperation("获取共享素材列表")
+    @GetMapping("/materials/isPublic")
+    public Result<Page<Material>> listPublic(
+            @RequestParam(required = false) @ApiParam(value = "素材内容模糊匹配") String content,
+            @RequestParam(required = false) @ApiParam(value = "来源") String source,
+            @RequestParam(required = false) @ApiParam(value = "父级素材Id（0-本素材不是仿写）") Integer parentId,
+            @RequestParam(defaultValue = "0") @ApiParam(value = "偏移量") Integer offset,
+            @RequestParam(defaultValue = "10") @ApiParam(value = "限制") Integer limit
+    ) {
+        Material condition = Material.builder()
+                .content(content)
+                .parentId(parentId)
+                .source(source)
+                .isPublic(1)
+                .build();
+
+        Integer total = iMaterialService.count(condition);
+        List<Material> list = new ArrayList<>();
+        if (total > 0) {
+            condition.setOffset(offset);
+            condition.setLimit(limit);
+            list = iMaterialService.list(condition);
+        }
+        Page<Material> result = new Page<>();
+        result.setTotal(total);
+        result.setRecords(list);
+        result.setCurrent(offset);
+        result.setSize(limit);
+        return Result.success(result);
+
     }
 
     @ApiOperation("获取素材列表")
