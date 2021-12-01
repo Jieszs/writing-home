@@ -33,7 +33,7 @@ CREATE TABLE `material`  (
   `updateTime` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`materialId`) USING BTREE,
   INDEX `idx_userId`(`userId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '素材' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '素材' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for material_type
@@ -49,7 +49,7 @@ CREATE TABLE `material_type`  (
   `updateTime` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`typeId`) USING BTREE,
   INDEX `idx_userId`(`userId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '素材分类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '素材分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for material_type_rela
@@ -61,7 +61,23 @@ CREATE TABLE `material_type_rela`  (
   `typeId` int(11) NOT NULL COMMENT '类型id',
   `insertTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材分类关系' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材分类关系' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for material_operate_log
+-- ----------------------------
+DROP TABLE IF EXISTS `material_operate_log`;
+CREATE TABLE `material_operate_log`  (
+  `logId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `materialId` int(11) NOT NULL COMMENT '素材id',
+  `userId` int(11) NOT NULL COMMENT '用户id',
+  `operateType` int(11) NOT NULL COMMENT '操作类型（1-点赞 2-取消点赞 3-收藏 4-取消收藏 ）',
+  `insertTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  PRIMARY KEY (`logId`) USING BTREE,
+  INDEX `idx_materialId`(`materialId`) USING BTREE
+
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材操作日志' ROW_FORMAT = Dynamic;
+
 
 -- ----------------------------
 -- Table structure for user_info
@@ -77,6 +93,6 @@ CREATE TABLE `user_info`  (
   `insertTime` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `updateTime` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`userId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户信息' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

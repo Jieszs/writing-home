@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiesz.writinghome.mapper.MaterialOperateLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jiesz.writinghome.entity.MaterialOperateLog">
+        <id column="logId" property="logId"/>
+        <result column="materialId" property="materialId"/>
+        <result column="userId" property="userId"/>
+        <result column="operateType" property="operateType"/>
+        <result column="insertTime" property="insertTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+            logId, materialId, userId, operateType, insertTime
+        </sql>
+
+    <!--查询条件-->
+    <sql id="where">
+        FROM material_operate_log
+        <where>
+            <if test="logId!=null and logId!=''">
+                AND logId = #{logId}
+            </if>
+            <if test="materialId!=null and materialId!=''">
+                AND materialId = #{materialId}
+            </if>
+            <if test="userId!=null and userId!=''">
+                AND userId = #{userId}
+            </if>
+            <if test="operateType!=null and operateType!=''">
+                AND operateType = #{operateType}
+            </if>
+            <if test="insertTime!=null and insertTime!=''">
+                AND insertTime = #{insertTime}
+            </if>
+        </where>
+    </sql>
+    <!--获取列表-->
+    <select id="list" parameterType="com.jiesz.writinghome.entity.MaterialOperateLog"
+            resultType="com.jiesz.writinghome.entity.MaterialOperateLog">
+        SELECT
+        <include refid="Base_Column_List"/>
+        <include refid="where"/>
+    </select>
+
+    <!--获取总数-->
+    <select id="count" parameterType="com.jiesz.writinghome.entity.MaterialOperateLog" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        <include refid="where"/>
+    </select>
+</mapper>

@@ -90,6 +90,7 @@ public class MaterialController {
         iMaterialService.update(material);
         return Result.success();
     }
+
     @ApiOperation("获取共享素材列表")
     @GetMapping("/materials/isPublic")
     public Result<Page<Material>> listPublic(
